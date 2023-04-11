@@ -10,8 +10,7 @@ if (length(str(args[1]))==0) {
 } else {
     raw_exp <- args[1]
 }
-gene_dir <- dirname(gene_file)
-print(gene_dir)
+print(raw_exp)
 
 
 if (length(str(args[2]))==0) {
@@ -31,9 +30,9 @@ print(target_list)
 
 
 if (length(str(args[4]))==0) {
-    control_condition <- list.files(path = "../", pattern = "control_condition", recursive=TRUE)
+    print("Please add a Control Condition in the App Panel.")
 } else {
     control_condition <- args[4]
 }
 
-base_name <- sample
+base_name <- "sample"
