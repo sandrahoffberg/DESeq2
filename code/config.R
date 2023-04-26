@@ -22,7 +22,7 @@ print(target_list)
 
 
 if (length(str(args[3]))==0) {
-    control_genes <- list.files(path = "../", pattern = "control_genes", recursive=TRUE)
+    control_genes <- list.files(path = "../", pattern = "control", recursive=TRUE)
 } else {
     control_genes <- args[3]
 }
