@@ -1,38 +1,42 @@
 #!/usr/bin/env Rscript
+system("set -ex")
+
+source("config.R", local=TRUE)
 
 library(DESeq2)
     
 #Load expression data. Set sample ID as row names.
 raw.exp <- read.csv(raw_exp)
-raw.exp <- raw.exp[!(raw.exp\$Treatment == 'none'),]
-    
+raw.exp <- raw.exp[!(raw.exp$Treatment == 'none'),]
+
 #Load targets and controls.
 targets <- read.csv(target_list)
 controls <- read.csv(control_genes)
 control.condition <- control_condition
-    
+
 #Grab metadata.
 metadata <- raw.exp[,c("SampleID","TreatmentDosageTreatTime")]
-rownames(metadata) <- metadata\$SampleID
-metadata\$SampleID <- NULL
-    
+rownames(metadata) <- metadata$SampleID
+metadata$SampleID <- NULL
+
 #Format expression data.
-rownames(raw.exp) <- raw.exp\$SampleID
+rownames(raw.exp) <- raw.exp$SampleID
 raw.exp <- t(raw.exp[ , gsub('-','.',targets[,1])])
-    
-    #Load DESeq2 dataset. Specify user-proved controls.
+
+#Load DESeq2 dataset. Specify user-proved controls.
 dds <- DESeqDataSetFromMatrix(countData = raw.exp, colData = metadata,
                               design = ~ TreatmentDosageTreatTime)
 dds <- estimateSizeFactors(dds, type = "poscount",
                           controlGenes=rownames(dds) %in% controls[,1])
 dds <- DESeq(dds, fitType = 'mean')
-    
+
 #Output results sorted by adjusted p-value.
-for (condition in sort(unique(metadata\$TreatmentDosageTreatTime))) {
+for (condition in sort(unique(metadata$TreatmentDosageTreatTime))) {
     if (condition != control.condition) {
         res <- results(dds, contrast = c("TreatmentDosageTreatTime",
                                      condition,control.condition))
-        write.csv(as.data.frame(res[order(res\$padj),]),
+        write.csv(as.data.frame(res[order(res$padj),]),
                   file=paste(base_name,condition,'csv',sep="."))
     }
 }
+
