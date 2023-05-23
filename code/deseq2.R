@@ -3,6 +3,8 @@ system("set -ex")
 
 source("config.R", local=TRUE)
 
+if (run_capsule == "yes") {
+
 library(DESeq2)
     
 #Load expression data. Set sample ID as row names.
@@ -23,7 +25,7 @@ metadata$SampleID <- NULL
 rownames(raw.exp) <- raw.exp$SampleID
 raw.exp <- t(raw.exp[ , gsub('-','.',targets[,1])])
 
-#Load DESeq2 dataset. Specify user-proved controls.
+#Load DESeq2 dataset. Specify user-provided controls.
 dds <- DESeqDataSetFromMatrix(countData = raw.exp, colData = metadata,
                               design = ~ TreatmentDosageTreatTime)
 dds <- estimateSizeFactors(dds, type = "poscount",
@@ -36,7 +38,8 @@ for (condition in sort(unique(metadata$TreatmentDosageTreatTime))) {
         res <- results(dds, contrast = c("TreatmentDosageTreatTime",
                                      condition,control.condition))
         write.csv(as.data.frame(res[order(res$padj),]),
-                  file=paste(base_name,condition,'csv',sep="."))
+                  file=paste("../results/",base_name,"_",condition,'.csv',sep=""))
     }
 }
 
+}

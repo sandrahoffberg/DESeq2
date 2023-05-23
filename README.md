@@ -13,7 +13,7 @@ DESeq2 estimates variance-mean dependence in count data from high-throughput seq
 
 ### Outputs: 
 
-
+- Many csv files named with {sample}_{condition}
 
 ### App Panel Parameters: 
 - Raw expression file from Seurat output (.raw.exp.csv)
