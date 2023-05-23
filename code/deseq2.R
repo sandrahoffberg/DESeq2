@@ -42,4 +42,8 @@ for (condition in sort(unique(metadata$TreatmentDosageTreatTime))) {
     }
 }
 
+} else {
+    dummy_file<-file("../results/not_run.txt")
+    writeLines("DESeq2 capsule was not run", dummy_file)
+    close(dummy_file)
 }
