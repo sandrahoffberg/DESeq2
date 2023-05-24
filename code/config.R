@@ -24,11 +24,11 @@ print(raw_exp)
 
 if (length(args) == 0 | nchar(args[3])==0) {
 #if (length(str(args[2]))==0) {
-    target_list <- list.files(path = "../data", pattern = ".*arget.*", full.names = TRUE, recursive=TRUE)
+    target_file <- list.files(path = "../data", pattern = ".*arget.*", full.names = TRUE, recursive=TRUE)
 } else {
-    target_list <- args[3]
+    target_file <- args[3]
 }
-print(target_list)
+print(target_file)
 
 
 if (length(args) == 0 | nchar(args[4])==0) {

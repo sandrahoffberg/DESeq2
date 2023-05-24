@@ -12,7 +12,7 @@ raw.exp <- read.csv(raw_exp)
 raw.exp <- raw.exp[!(raw.exp$Treatment == 'none'),]
 
 #Load targets and controls.
-targets <- read.csv(target_list)
+targets <- read.csv(target_file)
 controls <- read.csv(control_genes)
 control.condition <- control_condition
 
