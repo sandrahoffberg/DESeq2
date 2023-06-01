@@ -2,6 +2,7 @@
 system("set -ex")
 
 source("config.R", local=TRUE)
+source("pipeline_config.sh", local=TRUE)
 
 if (run_capsule == "yes") {
 
