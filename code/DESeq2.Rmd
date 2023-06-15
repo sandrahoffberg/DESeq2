@@ -173,6 +173,7 @@ j
 k
 l
 
+dir.create("../results/plot_by_gene/")
 ggsave(file="../results/plots_by_gene/ENSG00000080910.svg", plot=g, width=10, height=8)
 ggsave(file="../results/plots_by_gene/ENSG00000142959.svg", plot=h, width=10, height=8)
 ggsave(file="../results/plots_by_gene/ENSG00000196611.svg", plot=i, width=10, height=8)
