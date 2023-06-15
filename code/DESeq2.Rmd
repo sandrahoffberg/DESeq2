@@ -3,6 +3,10 @@ title: "DESeq2.Rmd"
 author: "Sandra Hoffberg"
 date: "2023-06-14"
 output: html_document
+params: 
+  alpha: 0.5
+  colNonSig: 'darkgray'
+  colSig: 'blue'
 ---
 
 ```{r setup, include=FALSE}
@@ -13,26 +17,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### RNA-Sequence Analysis Workflow
 
-1. Quality assess and clean raw sequencing data
-2. Align reads to a reference
-3. Count the number of reads assigned to each contig/gene
-4. Extract counts and store in a matrix
-5. Create column metadata table
-6. Analyze count data using DESEQ2
-
+1.  Quality assess and clean raw sequencing data
+2.  Align reads to a reference
+3.  Count the number of reads assigned to each contig/gene
+4.  Extract counts and store in a matrix
+5.  Create column metadata table
+6.  Analyze count data using DESEQ2
 
 #### Load libraries that are pre-installed on the Environment UI page.
+
 ```{r message=FALSE}
 library(DESeq2, quietly = TRUE)
 library(ggplot2, quietly = TRUE)
-```
-
-### get App Panel Parameters
-```{r load config}
-source("config.R", local=TRUE)
+library(knitr, quietly = TRUE)
 ```
 
 ### Download data
+
 ```{r Download data}
 
 # Read in the raw read counts
@@ -45,9 +46,8 @@ head(sampleData)
 
 ```
 
-
-
 ### Construct DESEQDataSet Object
+
 ```{r DESeq object}
 
 # Convert count data to a matrix of appropriate form that DEseq2 can read
@@ -85,8 +85,8 @@ deseq2Data <- DESeqDataSetFromMatrix(countData=rawCounts, colData=sampleData, de
 deseq2Data
 ```
 
-
 ### Pre-filtering of data to reduce dataset size
+
 ```{r prefilter}
 # See what affect this filter will have.
 dim(deseq2Data)
@@ -96,8 +96,8 @@ dim(deseq2Data[rowSums(counts(deseq2Data)) > 5, ])
 deseq2Data <- deseq2Data[rowSums(counts(deseq2Data)) > 5, ]
 ```
 
-
 ### Run the DESEQ function and look at results table
+
 ```{r run DESeq}
 deseq2Data <- DESeq(deseq2Data)
 
@@ -106,29 +106,34 @@ deseq2Data <- DESeq(deseq2Data)
 deseq2Results <- results(deseq2Data, contrast=c("tissueType", "primary colorectal cancer", "normal colonic epithelium"))
 ```
 
-
-
 ### Summary of differential gene expression
+
 ```{r summary}
 # View summary of results
 summary(deseq2Results)
 ```
 
-
 ### Sort summary list by p-value
+
 ```{r sort summary}
 res <- deseq2Results[order(deseq2Results$padj),]
 head(res)
 ```
 
+### Plot the MA plot: log ratio (M) vs an average (A)
 
-### Plot the MA plot:  log ratio (M) vs an average (A)
 ```{r MA plot}
-plotMA(deseq2Results, alpha=alpha, main=paste("MA plot with alpha of", alpha, sep=" "), colNonSig=colNonSig, colSig=colSig)
+
+output_ma_file <- '../results/MA_plot.png'
+
+png(output_ma_file)
+plotMA(deseq2Results, alpha=params$alpha, main=paste("MA plot with alpha of", params$alpha, sep=" "), colNonSig=params$colNonSig, colSig=params$colSig)
+dev.off()
+include_graphics(output_ma_file)
 ```
 
-
 ### Plot the counts
+
 ```{r plot counts}
 a <- plotCounts(deseq2Data, gene="ENSG00000080910", intgroup="tissueType", returnData=TRUE)
 b <- plotCounts(deseq2Data, gene="ENSG00000142959", intgroup="tissueType", returnData=TRUE)
@@ -181,20 +186,26 @@ ggsave(file="../results/plots_by_gene/ENSG00000167767.svg", plot=l, width=10, he
 ```
 
 ### Volcano Plot
+
 ```{r volcano plot}
 #reset par
 par(mfrow=c(1,1))
 
+output_volcano_file <- '../results/volcano_plot.png'
+
+png(output_volcano_file)
 # Make a basic volcano plot
 with(res, plot(log2FoldChange, -log10(pvalue), pch=20, main="Volcano plot", xlim=c(-3,3)))
 
 # Add colored points: blue if padj<0.01, red if log2FC>1 and padj<0.05)
 with(subset(res, padj<.01 ), points(log2FoldChange, -log10(pvalue), pch=20, col="blue"))
 with(subset(res, padj<.01 & abs(log2FoldChange)>2), points(log2FoldChange, -log10(pvalue), pch=20, col="red"))
+dev.off()
+include_graphics(output_volcano_file)
 ```
 
-
 ### PCA
+
 ```{r PCA}
 #First we need to transform the raw count data
 #vst function will perform variance stabilizing transformation
@@ -205,4 +216,3 @@ PCA
 ggsave(file="../results/PCA.svg", plot=PCA, width=10, height=10)
 
 ```
-
