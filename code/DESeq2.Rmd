@@ -72,13 +72,13 @@ all(colnames(rawCounts) == rownames(sampleData))
 
 # rename the tissue types
 rename_tissues <- function(x){
-  x <- switch(as.character(x), "normal"="normal-looking surrounding colonic epithelium", "primary tumor"="primary colorectal cancer",  "colorectal cancer metastatic in the liver"="metastatic colorectal cancer to the liver")
+  x <- switch(as.character(x), "normal"="normal colonic epithelium", "primary tumor"="primary colorectal cancer",  "colorectal cancer metastatic in the liver"="metastatic cancer to the liver")
   return(x)
 }
 sampleData$tissueType <- unlist(lapply(sampleData$tissueType, rename_tissues))
 
 # Order the tissue types so that it is sensible and make sure the control sample is first: normal sample -> primary tumor -> metastatic tumor
-sampleData$tissueType <- factor(sampleData$tissueType, levels=c("normal-looking surrounding colonic epithelium", "primary colorectal cancer", "metastatic colorectal cancer to the liver"))
+sampleData$tissueType <- factor(sampleData$tissueType, levels=c("normal colonic epithelium", "primary colorectal cancer", "metastatic cancer to the liver"))
 
 # Create the DEseq2DataSet object
 deseq2Data <- DESeqDataSetFromMatrix(countData=rawCounts, colData=sampleData, design= ~ individualID + tissueType)
@@ -103,7 +103,7 @@ deseq2Data <- DESeq(deseq2Data)
 
 # Extract differential expression results
 # For "tissueType" perform primary vs normal comparison
-deseq2Results <- results(deseq2Data, contrast=c("tissueType", "primary colorectal cancer", "normal-looking surrounding colonic epithelium"))
+deseq2Results <- results(deseq2Data, contrast=c("tissueType", "primary colorectal cancer", "normal colonic epithelium"))
 ```
 
 
@@ -124,18 +124,15 @@ head(res)
 
 ### Plot the MA plot:  log ratio (M) vs an average (A)
 ```{r MA plot}
-alpha=0.001
-colNonSig="darkgray"
-colSig="blue"
-plotMA(deseq2Results, alpha=alpha, main=paste("MA plot with alpha of", alpha, sep=" "), colNonSig=colNonSig, colSig=colSig)
+MA <- plotMA(deseq2Results, alpha=alpha, main=paste("MA plot with alpha of", alpha, sep=" "), colNonSig=colNonSig, colSig=colSig)
+MA
+ggsave(file="../results/MA_plot.svg", plot=MA, width=10, height=8)
+
 ```
 
 
 ### Plot the counts
 ```{r plot counts}
-
-
-
 a <- plotCounts(deseq2Data, gene="ENSG00000080910", intgroup="tissueType", returnData=TRUE)
 b <- plotCounts(deseq2Data, gene="ENSG00000142959", intgroup="tissueType", returnData=TRUE)
 c <- plotCounts(deseq2Data, gene="ENSG00000196611", intgroup="tissueType", returnData=TRUE)
@@ -143,31 +140,46 @@ d <- plotCounts(deseq2Data, gene="ENSG00000122641", intgroup="tissueType", retur
 e <- plotCounts(deseq2Data, gene="ENSG00000168748", intgroup="tissueType", returnData=TRUE)
 f <- plotCounts(deseq2Data, gene="ENSG00000167767", intgroup="tissueType", returnData=TRUE)
 
+
+g <- ggplot(a, aes(x=tissueType, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+h <- ggplot(b, aes(x=tissueType, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+i <- ggplot(c, aes(x=tissueType, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+j <- ggplot(d, aes(x=tissueType, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+k <- ggplot(e, aes(x=tissueType, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+l <- ggplot(f, aes(x=tissueType, y=count)) + 
+  geom_point(position=position_jitter(w=0.1,h=0)) + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
 par(mfrow=c(2,3))
+g
+h
+i
+j
+k
+l
 
-ggplot(a, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
+ggsave(file="../results/ENSG00000080910.svg", plot=g, width=10, height=8)
+ggsave(file="../results/ENSG00000142959.svg", plot=h, width=10, height=8)
+ggsave(file="../results/ENSG00000196611.svg", plot=i, width=10, height=8)
+ggsave(file="../results/ENSG00000122641.svg", plot=j, width=10, height=8)
+ggsave(file="../results/ENSG00000168748.svg", plot=k, width=10, height=8)
+ggsave(file="../results/ENSG00000167767.svg", plot=l, width=10, height=8)
 
-ggplot(b, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
-
-ggplot(c, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
-
-ggplot(d, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
-
-ggplot(e, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
-
-ggplot(f, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust=1))
 ```
 
 ### Volcano Plot
@@ -190,7 +202,9 @@ with(subset(res, padj<.01 & abs(log2FoldChange)>2), points(log2FoldChange, -log1
 #vst function will perform variance stabilizing transformation
 
 vsdata <- vst(deseq2Data, blind=FALSE)
-plotPCA(vsdata, intgroup="tissueType") + scale_color_manual(values=c("red","forestgreen","blue")) + scale_size_manual(values=1)
+PCA <- plotPCA(vsdata, intgroup="tissueType") + scale_color_manual(values=c("red","forestgreen","blue")) + scale_size_manual(values=1)
+PCA
+ggsave(file="../results/PCA.svg", plot=PCA, width=10, height=8)
 
 ```
 

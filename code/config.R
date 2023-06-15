@@ -11,9 +11,9 @@ if (length(args) == 0 | nchar(args[1])==0) {
 }
 
 if (length(args) == 0 | nchar(args[2])==0) {
-    conNonSig <- "darkgray"
+    colNonSig <- "darkgray"
 } else {
-    conNonSig <- args[2]
+    colNonSig <- args[2]
 }
 
 if (length(args) == 0 | nchar(args[3])==0) {
