@@ -124,10 +124,7 @@ head(res)
 
 ### Plot the MA plot:  log ratio (M) vs an average (A)
 ```{r MA plot}
-MA <- plotMA(deseq2Results, alpha=alpha, main=paste("MA plot with alpha of", alpha, sep=" "), colNonSig=colNonSig, colSig=colSig)
-MA
-ggsave(file="../results/MA_plot.svg", plot=MA, width=10, height=8)
-
+plotMA(deseq2Results, alpha=alpha, main=paste("MA plot with alpha of", alpha, sep=" "), colNonSig=colNonSig, colSig=colSig)
 ```
 
 
@@ -173,7 +170,7 @@ j
 k
 l
 
-dir.create("../results/plot_by_gene/")
+dir.create("../results/plots_by_gene/", recursive=TRUE)
 ggsave(file="../results/plots_by_gene/ENSG00000080910.svg", plot=g, width=10, height=8)
 ggsave(file="../results/plots_by_gene/ENSG00000142959.svg", plot=h, width=10, height=8)
 ggsave(file="../results/plots_by_gene/ENSG00000196611.svg", plot=i, width=10, height=8)
