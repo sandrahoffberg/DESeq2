@@ -173,12 +173,12 @@ j
 k
 l
 
-ggsave(file="../results/ENSG00000080910.svg", plot=g, width=10, height=8)
-ggsave(file="../results/ENSG00000142959.svg", plot=h, width=10, height=8)
-ggsave(file="../results/ENSG00000196611.svg", plot=i, width=10, height=8)
-ggsave(file="../results/ENSG00000122641.svg", plot=j, width=10, height=8)
-ggsave(file="../results/ENSG00000168748.svg", plot=k, width=10, height=8)
-ggsave(file="../results/ENSG00000167767.svg", plot=l, width=10, height=8)
+ggsave(file="../results/plots_by_gene/ENSG00000080910.svg", plot=g, width=10, height=8)
+ggsave(file="../results/plots_by_gene/ENSG00000142959.svg", plot=h, width=10, height=8)
+ggsave(file="../results/plots_by_gene/ENSG00000196611.svg", plot=i, width=10, height=8)
+ggsave(file="../results/plots_by_gene/ENSG00000122641.svg", plot=j, width=10, height=8)
+ggsave(file="../results/plots_by_gene/ENSG00000168748.svg", plot=k, width=10, height=8)
+ggsave(file="../results/plots_by_gene/ENSG00000167767.svg", plot=l, width=10, height=8)
 
 ```
 
@@ -202,9 +202,9 @@ with(subset(res, padj<.01 & abs(log2FoldChange)>2), points(log2FoldChange, -log1
 #vst function will perform variance stabilizing transformation
 
 vsdata <- vst(deseq2Data, blind=FALSE)
-PCA <- plotPCA(vsdata, intgroup="tissueType") + scale_color_manual(values=c("red","forestgreen","blue")) + scale_size_manual(values=1)
+PCA <- plotPCA(vsdata, intgroup="tissueType") + scale_color_manual(values=c("red","forestgreen","blue"))
 PCA
-ggsave(file="../results/PCA.svg", plot=PCA, width=10, height=8)
+ggsave(file="../results/PCA.svg", plot=PCA, width=10, height=10)
 
 ```
 
