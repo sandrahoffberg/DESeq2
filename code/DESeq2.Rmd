@@ -11,6 +11,7 @@ params:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "../results/")
 ```
 
 ## DESEQ2 R Tutorial
@@ -27,6 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #### Load libraries that are pre-installed on the Environment UI page.
 
 ```{r message=FALSE}
+
 library(DESeq2, quietly = TRUE)
 library(ggplot2, quietly = TRUE)
 library(knitr, quietly = TRUE)
@@ -37,11 +39,11 @@ library(knitr, quietly = TRUE)
 ```{r Download data}
 
 # Read in the raw read counts
-rawCounts <- read.delim("http://genomedata.org/gen-viz-workshop/intro_to_deseq2/tutorial/E-GEOD-50760-raw-counts.tsv")
+rawCounts <- read.delim("../data/readcounts_metadata/E-GEOD-50760-raw-counts.tsv")
 head(rawCounts)
 
 # Read in the sample mappings
-sampleData <- read.delim("http://genomedata.org/gen-viz-workshop/intro_to_deseq2/tutorial/E-GEOD-50760-experiment-design.tsv")
+sampleData <- read.delim("/data/readcounts_metadata/E-GEOD-50760-experiment-design.tsv")
 head(sampleData)
 
 ```
@@ -100,6 +102,10 @@ deseq2Data <- deseq2Data[rowSums(counts(deseq2Data)) > 5, ]
 
 ```{r run DESeq}
 deseq2Data <- DESeq(deseq2Data)
+
+# save this as an object
+dir.create("./DESeq2_object/")
+saveRDS(deseq2Data, file = "./DESeq2_object/DESeq.rds")
 
 # Extract differential expression results
 # For "tissueType" perform primary vs normal comparison

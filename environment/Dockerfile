@@ -1,4 +1,4 @@
-# hash:sha256:f5046b9250bc54513b87effdb4a8bc57d8e9f09e5e57dd2b1de1df3e78a7a73d
+# hash:sha256:5db4483e06f3dc23070d88a29f8fe13760d7b18c3610b27f39a17c3c27a5f333
 FROM registry.apps.codeocean.com/codeocean/r-studio:2022.07.0-548-r4.2.1-ubuntu18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -7,13 +7,21 @@ ARG GIT_ASKPASS
 ARG GIT_ACCESS_TOKEN
 COPY git-askpass /
 
-RUN apt-get update \
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys \
+        0xAD2323F17326AE31401037733E05EBFF05441C52 \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends software-properties-common \
+    && add-apt-repository -y 'deb http://deb.codeocean.com/shiny-server-trusty/ ubuntu main' \
+    && apt-get purge -y --autoremove software-properties-common \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         pandoc=1.19.2.4~dfsg-1build4 \
+        shiny-server=1.5.12.933 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN Rscript -e 'remotes::install_version("BiocManager", "1.30.21")' \
     && Rscript -e 'remotes::install_version("markdown", "1.7")' \
+    && Rscript -e 'remotes::install_version("shiny", "1.7.4")' \
     && Rscript -e 'remotes::install_version("svglite", "2.1.1")'
 
 RUN Rscript -e 'options(warn=2); install.packages("BiocManager")'
