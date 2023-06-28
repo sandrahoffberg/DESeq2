@@ -1,56 +1,18 @@
----
-title: "DESeq2.Rmd"
-author: "Sandra Hoffberg"
-date: "2023-06-14"
-output: html_document
-params: 
-  alpha: 0.5
-  colNonSig: 'darkgray'
-  colSig: 'blue'
----
+library(DESeq2)
+library(ggplot2)
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(root.dir = "../results/")
-```
-
-## DESEQ2 R Tutorial
-
-### RNA-Sequence Analysis Workflow
-
-1.  Quality assess and clean raw sequencing data
-2.  Align reads to a reference
-3.  Count the number of reads assigned to each contig/gene
-4.  Extract counts and store in a matrix
-5.  Create column metadata table
-6.  Analyze count data using DESEQ2
-
-#### Load libraries that are pre-installed on the Environment UI page.
-
-```{r message=FALSE}
-
-library(DESeq2, quietly = TRUE)
-library(ggplot2, quietly = TRUE)
-library(knitr, quietly = TRUE)
-```
-
-### Download data
-
-```{r Download data}
+source("config.R", local=TRUE)
 
 # Read in the raw read counts
-rawCounts <- read.delim("../data/readcounts_metadata/E-GEOD-50760-raw-counts.tsv")
+rawCounts <- read.csv(raw_exp)
 head(rawCounts)
 
 # Read in the sample mappings
-sampleData <- read.delim("/data/readcounts_metadata/E-GEOD-50760-experiment-design.tsv")
+sampleData <- read.csv(metadata)
 head(sampleData)
 
-```
 
 ### Construct DESEQDataSet Object
-
-```{r DESeq object}
 
 # Convert count data to a matrix of appropriate form that DEseq2 can read
 geneID <- rawCounts$Gene.ID
@@ -72,81 +34,56 @@ head(sampleData)
 rawCounts <- rawCounts[,unique(rownames(sampleData))]
 all(colnames(rawCounts) == rownames(sampleData))
 
-# rename the tissue types
-rename_tissues <- function(x){
-  x <- switch(as.character(x), "normal"="normal colonic epithelium", "primary tumor"="primary colorectal cancer",  "colorectal cancer metastatic in the liver"="metastatic cancer to the liver")
-  return(x)
-}
-sampleData$tissueType <- unlist(lapply(sampleData$tissueType, rename_tissues))
-
-# Order the tissue types so that it is sensible and make sure the control sample is first: normal sample -> primary tumor -> metastatic tumor
-sampleData$tissueType <- factor(sampleData$tissueType, levels=c("normal colonic epithelium", "primary colorectal cancer", "metastatic cancer to the liver"))
-
 # Create the DEseq2DataSet object
 deseq2Data <- DESeqDataSetFromMatrix(countData=rawCounts, colData=sampleData, design= ~ individualID + tissueType)
 deseq2Data
-```
 
 ### Pre-filtering of data to reduce dataset size
 
-```{r prefilter}
 # See what affect this filter will have.
 dim(deseq2Data)
-dim(deseq2Data[rowSums(counts(deseq2Data)) > 5, ])
+dim(deseq2Data[rowSums(counts(deseq2Data)) > filter, ])
 
 # Perform pre-filtering of the genes that have less than 5 reads in all samples
-deseq2Data <- deseq2Data[rowSums(counts(deseq2Data)) > 5, ]
-```
+deseq2Data <- deseq2Data[rowSums(counts(deseq2Data)) > filter, ]
+
 
 ### Run the DESEQ function and look at results table
 
-```{r run DESeq}
 deseq2Data <- DESeq(deseq2Data)
-
-# save this as an object
-dir.create("./DESeq2_object/")
-saveRDS(deseq2Data, file = "./DESeq2_object/DESeq.rds")
 
 # Extract differential expression results
 # For "tissueType" perform primary vs normal comparison
-deseq2Results <- results(deseq2Data, contrast=c("tissueType", "primary colorectal cancer", "normal colonic epithelium"))
-```
+deseq2Results <- results(deseq2Data)#, contrast=c("tissueType", "primary colorectal cancer", "normal colonic epithelium"))
 
 ### Summary of differential gene expression
 
-```{r summary}
 # View summary of results
 summary(deseq2Results)
-```
 
 ### Sort summary list by p-value
 
-```{r sort summary}
 res <- deseq2Results[order(deseq2Results$padj),]
 head(res)
-```
+
 
 ### Plot the MA plot: log ratio (M) vs an average (A)
-
-```{r MA plot}
 
 output_ma_file <- '../results/MA_plot.png'
 
 png(output_ma_file)
-plotMA(deseq2Results, alpha=params$alpha, main=paste("MA plot with alpha of", params$alpha, sep=" "), colNonSig=params$colNonSig, colSig=params$colSig)
+plotMA(deseq2Results, alpha=alpha, main=paste("MA plot with alpha of", alpha, sep=" "))
 dev.off()
 include_graphics(output_ma_file)
-```
 
 ### Plot the counts
 
-```{r plot counts}
-a <- plotCounts(deseq2Data, gene="ENSG00000080910", intgroup="tissueType", returnData=TRUE)
-b <- plotCounts(deseq2Data, gene="ENSG00000142959", intgroup="tissueType", returnData=TRUE)
-c <- plotCounts(deseq2Data, gene="ENSG00000196611", intgroup="tissueType", returnData=TRUE)
-d <- plotCounts(deseq2Data, gene="ENSG00000122641", intgroup="tissueType", returnData=TRUE)
-e <- plotCounts(deseq2Data, gene="ENSG00000168748", intgroup="tissueType", returnData=TRUE)
-f <- plotCounts(deseq2Data, gene="ENSG00000167767", intgroup="tissueType", returnData=TRUE)
+a <- plotCounts(deseq2Data, gene=res@rownames[1], intgroup="tissueType", returnData=TRUE)
+b <- plotCounts(deseq2Data, gene=res@rownames[2], intgroup="tissueType", returnData=TRUE)
+c <- plotCounts(deseq2Data, gene=res@rownames[3], intgroup="tissueType", returnData=TRUE)
+d <- plotCounts(deseq2Data, gene=res@rownames[4], intgroup="tissueType", returnData=TRUE)
+e <- plotCounts(deseq2Data, gene=res@rownames[5], intgroup="tissueType", returnData=TRUE)
+f <- plotCounts(deseq2Data, gene=res@rownames[6], intgroup="tissueType", returnData=TRUE)
 
 
 g <- ggplot(a, aes(x=tissueType, y=count)) + 
@@ -189,11 +126,9 @@ ggsave(file="../results/plots_by_gene/ENSG00000122641.svg", plot=j, width=10, he
 ggsave(file="../results/plots_by_gene/ENSG00000168748.svg", plot=k, width=10, height=8)
 ggsave(file="../results/plots_by_gene/ENSG00000167767.svg", plot=l, width=10, height=8)
 
-```
 
 ### Volcano Plot
 
-```{r volcano plot}
 #reset par
 par(mfrow=c(1,1))
 
@@ -208,11 +143,11 @@ with(subset(res, padj<.01 ), points(log2FoldChange, -log10(pvalue), pch=20, col=
 with(subset(res, padj<.01 & abs(log2FoldChange)>2), points(log2FoldChange, -log10(pvalue), pch=20, col="red"))
 dev.off()
 include_graphics(output_volcano_file)
-```
+ggsave(file="../results/PCA.svg", plot=PCA, width=10, height=10)
+
 
 ### PCA
 
-```{r PCA}
 #First we need to transform the raw count data
 #vst function will perform variance stabilizing transformation
 
@@ -220,5 +155,3 @@ vsdata <- vst(deseq2Data, blind=FALSE)
 PCA <- plotPCA(vsdata, intgroup="tissueType") + scale_color_manual(values=c("red","forestgreen","blue"))
 PCA
 ggsave(file="../results/PCA.svg", plot=PCA, width=10, height=10)
-
-```

@@ -1,10 +1,32 @@
-## DESeq2 analysis in Rmarkdown
+[![Code Ocean Logo](images/CO_logo_135x72.png)](http://codeocean.com/product)
+
+<hr>
+
+# DESeq2
 
 Differential expression analysis is used to identify differences in the transcriptome (gene expression) across a cohort of samples. Often, it will be used to define the differences between multiple biological conditions (e.g. drug treated vs. untreated samples). 
 
 
 This capsule can be run either in an RStudio cloud workstation, or as a Reproducible Run. 
 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = "../results/")
+```
+
+## DESEQ2 R Tutorial
+
+### RNA-Sequence Analysis Workflow
+
+1.  Quality assess and clean raw sequencing data
+2.  Align reads to a reference
+3.  Count the number of reads assigned to each contig/gene
+4.  Extract counts and store in a matrix
+5.  Create column metadata table
+6.  Analyze count data using DESEQ2
+
+#### Load libraries that are pre-installed on the Environment UI page.
 
 ### Input data
 
@@ -29,3 +51,10 @@ This DESeq2 demo follows tutorials available online
 
 [Obtaining data and running DESeq2](https://genviz.org/module-04-expression/0004/02/01/DifferentialExpression/) can be found here. <br>
 [Plotting](https://lashlock.github.io/compbio/R_presentation.html) can be found here. 
+
+
+
+<hr>
+
+[Code Ocean](https://codeocean.com/) is a cloud-based computational platform that aims to make it easy for researchers to share, discover, and run code.<br /><br />
+[![Code Ocean Logo](images/CO_logo_68x36.png)](https://www.codeocean.com)

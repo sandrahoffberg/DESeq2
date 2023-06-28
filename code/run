@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 set -ex
 
-source ./config.sh
-
 # This is the master script for the capsule. When you click "Reproducible Run", the code in this file will execute.
-Rscript -e "rmarkdown::render(input = 'DESeq2.Rmd', output_dir = '../results', clean = TRUE, params=list(alpha=$alpha, colNonSig='$colNonSig', colSig='$colSig'))"
+bash runDESeq2.sh "$@"
