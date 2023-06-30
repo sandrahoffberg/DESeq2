@@ -7,35 +7,77 @@ args <- commandArgs(trailingOnly=TRUE)
 
 if (length(args) == 0 | nchar(args[2])==0) {
 #if (length(str(args[1]))==0) {
-    raw_exp <- list.files(path = "../data", pattern = ".*raw.*", full.names = TRUE, recursive=TRUE)
+    counts <- list.files(path = "../data", pattern = ".*raw.*", full.names = TRUE, recursive=TRUE)
 } else {
-    raw_exp <- args[2]
+    counts <- args[2]
 }
-print(raw_exp)
+print(paste("Single data file:", counts))
 
 
 if (length(args) == 0 | nchar(args[3])==0) {
 #if (length(str(args[2]))==0) {
-    metadata <- list.files(path = "../data", pattern = ".*etadata.*", full.names = TRUE, recursive=TRUE)
+    transcripts <- list.files(path = "../data", pattern = "abundance", full.names = TRUE, recursive=TRUE)
+
 } else {
-    metadata <- args[3]
+    file_name <- paste(".*", args[3], ".*", sep ="")
+    transcripts <- list.files(path = "../data", pattern = file_name, full.names = TRUE, recursive=TRUE)
+
 }
-print(metadata)
+print(paste("Multiple data files:", transcripts))
 
 
 if (length(args) == 0 | nchar(args[4])==0) {
-#if (length(str(args[3]))==0) {
-    filter <- "5"
+    transcripts_genes <- list.files(path = "../data", pattern = ".*gene.*", full.names = TRUE, recursive=TRUE)
 } else {
-    filter <- args[4]
+    transcripts_genes <- args[4]
 }
-print(filter)
+print(paste("File that associates genes with transcripts:", transcripts_genes))
 
 
 if (length(args) == 0 | nchar(args[5])==0) {
-#if (length(str(args[3]))==0) {
+    analysis <- "kallisto"
+} else {
+    analysis <- args[5]
+}
+print(paste("Type of transcript abundance analysis:", analysis))
+
+
+if (length(args) == 0 | nchar(args[6])==0) {
+    metadata <- list.files(path = "../data", pattern = ".*etadata.*", full.names = TRUE, recursive=TRUE)
+} else {
+    metadata <- args[6]
+}
+print(paste("Sample info file:", metadata))
+
+
+if (length(args) == 0 | nchar(args[7])==0) {
+    control <- "normal"
+} else {
+    control <- args[7]
+}
+print(paste("Name of control condition:", control))
+
+
+if (length(args) == 0 | nchar(args[8])==0) {
+    filter <- "5"
+} else {
+    filter <- args[8]
+}
+print(paste("Minimum number of reads:", filter))
+
+
+
+if (length(args) == 0 | nchar(args[9])==0) {
     alpha <- "0.05"
 } else {
-    alpha <- args[5]
+    alpha <- args[9]
 }
-print(alpha)
+print(paste("Alpha signifiicance level:", alpha))
+
+
+if (length(args) == 0 | nchar(args[10])==0) {
+    plots <- 6
+} else {
+    plots <- args[10]
+}
+print(paste("Number of genes to plot:", plots))

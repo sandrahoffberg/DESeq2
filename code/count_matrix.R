@@ -4,13 +4,10 @@ library(ggplot2)
 source("config.R", local=TRUE)
 
 # Read in the raw read counts
-rawCounts <- read.csv(raw_exp)
-head(rawCounts)
+rawCounts <- read.csv(counts)
 
 # Read in the sample mappings
 sampleData <- read.csv(metadata)
-head(sampleData)
-
 
 ### Construct DESEQDataSet Object
 
@@ -36,7 +33,9 @@ all(colnames(rawCounts) == rownames(sampleData))
 
 # Create the DEseq2DataSet object
 deseq2Data <- DESeqDataSetFromMatrix(countData=rawCounts, colData=sampleData, design= ~ individualID + tissueType)
-deseq2Data
+
+condition <- "tissueType"
+
 
 source("filter_plot.R", local=TRUE)
 

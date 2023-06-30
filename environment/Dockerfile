@@ -1,4 +1,4 @@
-# hash:sha256:bf57857aa9e88c6250844eee51af653dd5eb05934b8ed40606a52323a8a98e33
+# hash:sha256:5442e25f5ae104bd619d58ab254e2b07ca9c4ea58872decea2f0fc4909ebd8e7
 FROM registry.apps.codeocean.com/codeocean/r-studio:2022.07.0-548-r4.2.1-ubuntu18.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -14,10 +14,13 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys \
     && add-apt-repository -y 'deb http://deb.codeocean.com/shiny-server-trusty/ ubuntu main' \
     && apt-get purge -y --autoremove software-properties-common
 
-RUN Rscript -e 'remotes::install_version("svglite", "2.1.1")'
+RUN Rscript -e 'remotes::install_version("BiocManager", "1.30.21")' \
+    && Rscript -e 'remotes::install_version("svglite", "2.1.1")'
 
 RUN Rscript -e 'options(warn=2); install.packages("BiocManager")'
 RUN Rscript -e 'options(warn=2); BiocManager::install(c( \
         "BiocGenerics", \
-        "DESeq2" \
-    ))' # Original versions: 0.44.0 1.38.3
+        "BiocVersion", \
+        "DESeq2", \
+        "tximport" \
+    ))' # Original versions: 0.44.0 3.16.0 1.38.3 1.26.1

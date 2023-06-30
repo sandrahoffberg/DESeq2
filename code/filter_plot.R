@@ -1,3 +1,7 @@
+# Specify the group name of the control
+#deseq2Data$condition <- relevel(deseq2Data$condition, ref = control)
+
+
 ### Pre-filtering of data to reduce dataset size
 
 # See what affect this filter will have.
@@ -8,23 +12,17 @@ dim(deseq2Data[rowSums(counts(deseq2Data)) > filter, ])
 deseq2Data <- deseq2Data[rowSums(counts(deseq2Data)) > filter, ]
 
 
-### Run the DESEQ function and look at results table
-
+# Run the DESEQ function
 deseq2Data <- DESeq(deseq2Data)
 
 # Extract differential expression results
-# For "tissueType" perform primary vs normal comparison
-deseq2Results <- results(deseq2Data)#, contrast=c("tissueType", "primary colorectal cancer", "normal colonic epithelium"))
-
-### Summary of differential gene expression
+deseq2Results <- results(deseq2Data)#, contrast=c("condition", "A", "B"))
 
 # View summary of results
 summary(deseq2Results)
 
-### Sort summary list by p-value
-
+# Sort summary list by p-value
 res <- deseq2Results[order(deseq2Results$padj),]
-head(res)
 
 
 ### Plot the MA plot: log ratio (M) vs an average (A)
@@ -37,45 +35,17 @@ dev.off()
 
 ### Plot the counts
 
-a <- plotCounts(deseq2Data, gene=res@rownames[1], intgroup="tissueType", returnData=TRUE)
-b <- plotCounts(deseq2Data, gene=res@rownames[2], intgroup="tissueType", returnData=TRUE)
-c <- plotCounts(deseq2Data, gene=res@rownames[3], intgroup="tissueType", returnData=TRUE)
-d <- plotCounts(deseq2Data, gene=res@rownames[4], intgroup="tissueType", returnData=TRUE)
-e <- plotCounts(deseq2Data, gene=res@rownames[5], intgroup="tissueType", returnData=TRUE)
-f <- plotCounts(deseq2Data, gene=res@rownames[6], intgroup="tissueType", returnData=TRUE)
-
-
-g <- ggplot(a, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-h <- ggplot(b, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-i <- ggplot(c, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-j <- ggplot(d, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-k <- ggplot(e, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-l <- ggplot(f, aes(x=tissueType, y=count)) + 
-  geom_point(position=position_jitter(w=0.1,h=0)) + 
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
 dir.create("../results/plots_by_gene/", recursive=TRUE)
-ggsave(file="../results/plots_by_gene/ENSG00000080910.png", plot=g, width=10, height=8)
-ggsave(file="../results/plots_by_gene/ENSG00000142959.png", plot=h, width=10, height=8)
-ggsave(file="../results/plots_by_gene/ENSG00000196611.png", plot=i, width=10, height=8)
-ggsave(file="../results/plots_by_gene/ENSG00000122641.png", plot=j, width=10, height=8)
-ggsave(file="../results/plots_by_gene/ENSG00000168748.png", plot=k, width=10, height=8)
-ggsave(file="../results/plots_by_gene/ENSG00000167767.png", plot=l, width=10, height=8)
+
+for (i in 1:plots) {
+  a <- plotCounts(deseq2Data, gene=res@rownames[i], intgroup=condition, returnData=TRUE)
+
+  b <- ggplot(a, aes(x=condition, y=count)) + 
+      geom_point(position=position_jitter(w=0.1,h=0)) + 
+      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+  ggsave(file=paste("../results/plots_by_gene/", res@rownames[i], ".png", sep=""), plot=b, width=10, height=8)
+}
 
 
 ### Volcano Plot
@@ -98,6 +68,6 @@ dev.off()
 #vst function will perform variance stabilizing transformation
 
 vsdata <- vst(deseq2Data, blind=FALSE)
-PCA <- plotPCA(vsdata, intgroup="tissueType") + scale_color_manual(values=c("red","forestgreen","blue"))
+PCA <- plotPCA(vsdata, intgroup=condition) + scale_color_manual(values=c("red","forestgreen","blue"))
 ggsave(file="../results/PCA.png", plot=PCA, width=10, height=10)
 
