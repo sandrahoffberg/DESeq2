@@ -1,7 +1,3 @@
-# Specify the group name of the control
-#deseq2Data$condition <- relevel(deseq2Data$condition, ref = control)
-
-
 ### Pre-filtering of data to reduce dataset size
 
 # See what affect this filter will have.

@@ -34,8 +34,8 @@ all(colnames(rawCounts) == rownames(sampleData))
 # Create the DEseq2DataSet object
 deseq2Data <- DESeqDataSetFromMatrix(countData=rawCounts, colData=sampleData, design= ~ individualID + tissueType)
 
-condition <- "tissueType"
-
+condition = condition_name
+#tissueType
 
 source("filter_plot.R", local=TRUE)
 

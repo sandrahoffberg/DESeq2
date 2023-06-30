@@ -8,6 +8,7 @@ deseq_object <- readRDS(counts)
 deseq2Data <- DESeqDataSet(deseq_object, design= ~ cell + dex)
 
 
-condition <- "dex"
+condition <- condition_name
+#dex
 
 source("filter_plot.R", local=TRUE)

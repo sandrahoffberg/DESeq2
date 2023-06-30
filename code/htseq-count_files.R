@@ -14,6 +14,7 @@ deseq2Data <- DESeqDataSetFromHTSeqCount(sampleTable = sampleTable,
                                        directory = "../data",
                                        design= ~ condition)
 
-condition <- "condition"
+condition <- condition_name
+#condition
 
 source("filter_plot.R", local=TRUE)

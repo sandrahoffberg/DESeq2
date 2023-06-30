@@ -51,11 +51,11 @@ print(paste("Sample info file:", metadata))
 
 
 if (length(args) == 0 | nchar(args[7])==0) {
-    control <- "normal"
+    condition_name <- "normal"
 } else {
-    control <- args[7]
+    condition_name <- args[7]
 }
-print(paste("Name of control condition:", control))
+print(paste("Column Name of condition:", condition_name))
 
 
 if (length(args) == 0 | nchar(args[8])==0) {
