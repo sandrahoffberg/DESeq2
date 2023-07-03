@@ -81,3 +81,11 @@ if (length(args) == 0 | nchar(args[10])==0) {
     plots <- args[10]
 }
 print(paste("Number of genes to plot:", plots))
+
+
+if (length(args) == 0 | nchar(args[11])==0) {
+    outfile <- "DESeq2_results"
+} else {
+    outfile <- args[11]
+}
+print(paste("Name of output file:", outfile))

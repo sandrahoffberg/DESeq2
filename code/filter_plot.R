@@ -12,13 +12,20 @@ deseq2Data <- deseq2Data[rowSums(counts(deseq2Data)) > filter, ]
 deseq2Data <- DESeq(deseq2Data)
 
 # Extract differential expression results
-deseq2Results <- results(deseq2Data)#, contrast=c("condition", "A", "B"))
+deseq2Results <- results(deseq2Data, alpha=alpha)#, contrast=c("condition", "A", "B"))
 
 # View summary of results
 summary(deseq2Results)
 
+# Count number of genes that are significant
+sum(deseq2Results$padj < alpha, na.rm=TRUE)
+
+
 # Sort summary list by p-value
 res <- deseq2Results[order(deseq2Results$padj),]
+
+# write the output to file 
+write.csv(as.data.frame(res), file=paste("../results/", outfile, ".csv", sep=""))
 
 
 ### Plot the MA plot: log ratio (M) vs an average (A)
