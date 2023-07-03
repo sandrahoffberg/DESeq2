@@ -6,7 +6,7 @@
 
 Differential expression analysis is used to identify differences in the transcriptome (gene expression) across a cohort of samples. Often, it will be used to define the differences between multiple biological conditions (e.g. drug treated vs. untreated samples). 
 
-For more information, see the (DESeq2 Vignette)[https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html]
+For more information, see the [DESeq2 Vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
 
 # Input data
@@ -20,7 +20,7 @@ Some advantages of using the above methods for transcript abundance estimation a
 
 
 2. Counts data: 
-from featurecounts, Seurat, etc
+from featurecounts, Seurat, etc.
 
 The user should provide the counts matrix, the information about the samples (the columns of the count matrix) as a DataFrame or data.frame, and the design formula. It is absolutely critical that the columns of the count matrix and the rows of the column data (information about samples) are in the same order. DESeq2 will not make guesses as to which column of the count matrix belongs to which row of the column data, these must be provided to DESeq2 already in consistent order.
 

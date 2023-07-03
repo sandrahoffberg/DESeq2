@@ -1,5 +1,8 @@
 metadata_version: 1
 name: DeSeq2
-description: "Differential gene expression analysis following online tutorials: \n\nhttps://genviz.org/module-04-expression/0004/02/01/DifferentialExpression/\nhttps://lashlock.github.io/compbio/R_presentation.html."
+description: |-
+  Differential gene expression analysis with multiple potential input types.
+
+  https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
 authors:
 - name: Sandra Hoffberg
