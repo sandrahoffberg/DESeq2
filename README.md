@@ -6,26 +6,31 @@
 
 Differential expression analysis is used to identify differences in the transcriptome (gene expression) across a cohort of samples. Often, it will be used to define the differences between multiple biological conditions (e.g. drug treated vs. untreated samples). 
 
+**The design formula must be edited as appropriate for the input data**:
+
+The design formula expresses the condition we want to measure the effect of, controlling for batch differences. The formula should be a tilde (~) followed by the variables (columns of the metadata file) with plus signs between them (it will be coerced into an formula if it is not already). The design can be changed later, however then all differential analysis steps should be repeated, as the design formula is used to estimate the dispersions and to estimate the log2 fold changes of the model. DESeq2 can analyze any possible experimental design that can be expressed with fixed effects terms (multiple factors, designs with interactions, designs with continuous variables, splines, and so on are all possible).
+
+
 For more information, see the [DESeq2 Vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
 
-# Input data
+## Input data
 
 Input data for DEseq2 consists of non-normalized sequence read counts at either the gene or transcript level. No preliminary normalization of this data is needed. DEseq2 will internally corrects for differences in library size, using the raw counts. This capsule can accommodate 4 different types of input data: 
 
-1. Transcript abundance data: 
+1. Transcript abundance data: <br>
 from Salmon, Sailfish, kallisto, RSEM, etc. 
 
 Some advantages of using the above methods for transcript abundance estimation are: (i) this approach corrects for potential changes in gene length across samples (e.g. from differential isoform usage) (Trapnell et al. 2013), (ii) some of these methods (Salmon, Sailfish, kallisto) are substantially faster and require less memory and disk usage compared to alignment-based methods that require creation and storage of BAM files, and (iii) it is possible to avoid discarding those fragments that can align to multiple genes with homologous sequence, thus increasing sensitivity (Robert and Watson 2015).  Multiple data files will be read in by giving the capsule a string found in the file names (i.e., "treated" can file treated.txt and untreated.txt). 
 
 
-2. Counts data: 
+2. Counts data: <br>
 from featurecounts, Seurat, etc.
 
 The user should provide the counts matrix, the information about the samples (the columns of the count matrix) as a DataFrame or data.frame, and the design formula. It is absolutely critical that the columns of the count matrix and the rows of the column data (information about samples) are in the same order. DESeq2 will not make guesses as to which column of the count matrix belongs to which row of the column data, these must be provided to DESeq2 already in consistent order.
 
 
-3. htseq-count data:
+3. htseq-count data: <br>
 from HTSeq Python package
 
 Multiple data files will be read in by giving the capsule a string found in the file names (i.e., "treated" can file treated.txt and untreated.txt). 
@@ -36,7 +41,7 @@ Multiple data files will be read in by giving the capsule a string found in the 
 If one has already created or obtained a SummarizedExperiment, the single file with data and metadata can be read in. 
 
 
-# Output
+## Output
 
 - CSV file with the results table
 
@@ -48,7 +53,7 @@ If one has already created or obtained a SummarizedExperiment, the single file w
 
 - Plots by gene: plot the normalized counts for a single gene in order to get an idea of what is occurring for that gene across the sample cohort.
 
-# App Panel Parameters
+## App Panel Parameters
 
 1. type of input data: Transcipt abundance, Count matrix, htseq count, or summarized experiment.
 2. File path to a single data file, for Count matrix or summarized experiment input data types. 
@@ -63,7 +68,7 @@ If one has already created or obtained a SummarizedExperiment, the single file w
 11. Name of output CSV file
 
 
-# Cite 
+## Cite 
 
 Love MI, Huber W, Anders S (2014). “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.” Genome Biology, 15, 550. doi:10.1186/s13059-014-0550-8.
 
