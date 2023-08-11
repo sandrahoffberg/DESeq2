@@ -1,5 +1,5 @@
-# hash:sha256:5442e25f5ae104bd619d58ab254e2b07ca9c4ea58872decea2f0fc4909ebd8e7
-FROM registry.apps.codeocean.com/codeocean/r-studio:2022.07.0-548-r4.2.1-ubuntu18.04
+# hash:sha256:dc2bb3a3d3bf8105a1b6d40e39c2f3cddc741b8debc4b481188febdd874475aa
+FROM registry.apps.codeocean.com/codeocean/py-r:python3.10.12-R4.2.3-IRkernel-ubuntu22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -14,7 +14,11 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys \
     && add-apt-repository -y 'deb http://deb.codeocean.com/shiny-server-trusty/ ubuntu main' \
     && apt-get purge -y --autoremove software-properties-common
 
-RUN Rscript -e 'remotes::install_version("BiocManager", "1.30.21")' \
+RUN mamba install -y \
+        r-base==4.3.1 \
+    && mamba clean -ya
+
+RUN Rscript -e 'remotes::install_version("BiocManager", "1.30.22")' \
     && Rscript -e 'remotes::install_version("svglite", "2.1.1")'
 
 RUN Rscript -e 'options(warn=2); install.packages("BiocManager")'
@@ -23,4 +27,4 @@ RUN Rscript -e 'options(warn=2); BiocManager::install(c( \
         "BiocVersion", \
         "DESeq2", \
         "tximport" \
-    ))' # Original versions: 0.44.0 3.16.0 1.38.3 1.26.1
+    ))' # Original versions: 0.46.0 3.17.1 1.40.2 1.28.0
