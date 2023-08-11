@@ -16,7 +16,7 @@ For more information, see the [DESeq2 Vignette](https://bioconductor.org/package
 
 ## Input data
 
-Input data for DEseq2 consists of non-normalized sequence read counts at either the gene or transcript level. No preliminary normalization of this data is needed. DEseq2 will internally corrects for differences in library size, using the raw counts. This capsule can accommodate 4 different types of input data: 
+Input data for DEseq2 consists of non-normalized sequence read counts at either the gene or transcript level. No preliminary normalization of this data is needed. DEseq2 internally corrects for differences in library size, using the raw counts. This capsule can accommodate 4 different types of input data: 
 
 1. Transcript abundance data: <br>
 from Salmon, Sailfish, kallisto, RSEM, etc. 
@@ -55,24 +55,40 @@ If one has already created or obtained a SummarizedExperiment, the single file w
 
 ## App Panel Parameters
 
-1. type of input data: Transcipt abundance, Count matrix, htseq count, or summarized experiment.
-2. File path to a single data file, for Count matrix or summarized experiment input data types. 
-3. String to locate multiple input data files, for Transcript abundance or htseq count data. 
-4. Table that correlated trabscipts to genes. 
-5. Type of transcript analysis performed upstreamm e.g., kallisto, RSEM, Salmon, sailfish
-6. Metadata file
-7. Name of column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex
-8. Minimum number of reads across all samples to include that sample in the data matrix
-9. Alpha value for significance
-10. Number of genes to save individual plots for
-11. Name of output CSV file
+Type of input data
+- Transcipt abundance, Count matrix, htseq count, or summarized experiment.
+
+File path to a single data file
+- For Count matrix or summarized experiment input data types. 
+
+Key word contained in multiple input files
+- for Transcript abundance or htseq count data. 
+
+Table that matches transcripts to genes. 
+
+Type of transcript analysis
+- What anlaysis was performed updstream e.g., kallisto, RSEM, Salmon, Sailfish
+
+Path to Sample Metadata 
+- Metadata file
+
+Name of treatment/control column
+- Column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex
+
+Minimum number of read
+- Minimum reads across all samples to include that sample in the data matrix
+
+Alpha value for significance
+
+Number of genes to save individual plots for
+
+Name of output file
+- Name of CSV file without file extension.
 
 
 ## Cite 
 
 Love MI, Huber W, Anders S (2014). “Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2.” Genome Biology, 15, 550. doi:10.1186/s13059-014-0550-8.
-
-
 
 <hr>
 
