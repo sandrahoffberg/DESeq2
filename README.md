@@ -23,12 +23,15 @@ from Salmon, Sailfish, kallisto, RSEM, etc.
 
 Some advantages of using the above methods for transcript abundance estimation are: (i) this approach corrects for potential changes in gene length across samples (e.g. from differential isoform usage) (Trapnell et al. 2013), (ii) some of these methods (Salmon, Sailfish, kallisto) are substantially faster and require less memory and disk usage compared to alignment-based methods that require creation and storage of BAM files, and (iii) it is possible to avoid discarding those fragments that can align to multiple genes with homologous sequence, thus increasing sensitivity (Robert and Watson 2015).  Multiple data files will be read in by giving the capsule a string found in the file names (i.e., "treated" can file treated.txt and untreated.txt). 
 
+If the transcript files are autodetected, they must contain "abundance" in the name. 
+
 
 2. Counts data: <br>
 from featurecounts, Seurat, etc.
 
-The user should provide the counts matrix, the information about the samples (the columns of the count matrix) as a DataFrame or data.frame, and the design formula. It is absolutely critical that the columns of the count matrix and the rows of the column data (information about samples) are in the same order. DESeq2 will not make guesses as to which column of the count matrix belongs to which row of the column data, these must be provided to DESeq2 already in consistent order.
+The user should provide (1) the counts matrix , (2) information about the samples (the columns of the count matrix) as a DataFrame or data.frame, and (3) the design formula. It is absolutely critical that the columns of the count matrix and the rows of the column data (information about samples) are in the same order. DESeq2 will not make guesses as to which column of the count matrix belongs to which row of the column data, these must be provided to DESeq2 already in consistent order.
 
+If the counts matrix is autodetected, it must contain "raw" in the name. 
 
 3. htseq-count data: <br>
 from HTSeq Python package
@@ -43,15 +46,15 @@ If one has already created or obtained a SummarizedExperiment, the single file w
 
 ## Output
 
-- CSV file with the results table
+- **DESeq2_results.csv**: CSV file with the results table
 
-- MA plot: MA plots display a log ratio (M) vs an average (A) in order to visualize the differences between two groups. In general we would expect the expression of genes to remain consistent between conditions and so the MA plot should be similar to the shape of a trumpet with most points residing on a y intercept of 0.
+- **MA_plot.png**: MA plots display a log ratio (M) vs an average (A) in order to visualize the differences between two groups. In general we would expect the expression of genes to remain consistent between conditions and so the MA plot should be similar to the shape of a trumpet with most points residing on a y intercept of 0.
 
-- PCA: Visualize how the samples group by treatment
+- **PCA.png**: Visualize how the samples group by treatment
 
-- Volcano Plot: The volcano plot enables to simultaneously capture the effect size and significance of each tested gene.
+- **volcano_plot.png**: The volcano plot enables to simultaneously capture the effect size and significance of each tested gene.
 
-- Plots by gene: plot the normalized counts for a single gene in order to get an idea of what is occurring for that gene across the sample cohort.
+- **/plots_by_gene**: A folder containing a file for each gene that plots the normalized counts for a single gene in order to get an idea of what is occurring for that gene across the sample cohort.
 
 ## App Panel Parameters
 
@@ -64,26 +67,34 @@ File path to a single data file
 Key word contained in multiple input files
 - for Transcript abundance or htseq count data. 
 
-Table that matches transcripts to genes. 
+Table that matches transcripts to genes.
+- for Transcipt abundance data. In CSV format, column 1 should be the transcript name and column 2 should be the Gene ID.  If the table is automatically detected, it must contain "gene" in the name. See the example below
+
+TXNAME,GENEID <br>
+ENST00000456328.2,ENSG00000223972.5 <br>
+ENST00000450305.2,ENSG00000223972.5 <br> 
+ENST00000473358.1,ENSG00000243485.5 <br>
 
 Type of transcript analysis
 - What anlaysis was performed updstream e.g., kallisto, RSEM, Salmon, Sailfish
 
 Path to Sample Metadata 
-- Metadata file
+- Metadata file, required for Transcript Abundance, HTseq-data, and Counts data. The format of the metadata file is flexible, but it should be a CSV file that lists the condition corresponding to each sample. The design formula reflects the condition, and must be edited as appropriate. If the metadata file is automatically detected, it must contain "Metadata" or "metadata" in the name.
 
 Name of treatment/control column
-- Column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex
+- Column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex.  [Default: condition]
 
-Minimum number of read
-- Minimum reads across all samples to include that sample in the data matrix
+Minimum number of reads
+- Minimum reads across all samples to include that sample in the data matrix [Default: 5]
 
 Alpha value for significance
+- the significance cutoff used for optimizing the independent filtering [Default: 0.1]. If the adjusted p-value cutoff (FDR) will be a value other than 0.1, alpha should be set to that value.
 
 Number of genes to save individual plots for
+- The # most significant genes to save plots for in the **/plots_by_gene** directory. [Default: 6]
 
 Name of output file
-- Name of CSV file without file extension.
+- Name of CSV file without file extension. [Default: DESeq2_results]
 
 
 ## Cite 

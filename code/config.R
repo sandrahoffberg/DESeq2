@@ -6,7 +6,6 @@ args <- commandArgs(trailingOnly=TRUE)
 
 
 if (length(args) == 0 | nchar(args[2])==0) {
-#if (length(str(args[1]))==0) {
     counts <- list.files(path = "../data", pattern = ".*raw.*", full.names = TRUE, recursive=TRUE)
 } else {
     counts <- args[2]
@@ -15,7 +14,6 @@ print(paste("Single data file:", counts))
 
 
 if (length(args) == 0 | nchar(args[3])==0) {
-#if (length(str(args[2]))==0) {
     transcripts <- list.files(path = "../data", pattern = "abundance", full.names = TRUE, recursive=TRUE)
 
 } else {
@@ -51,11 +49,11 @@ print(paste("Sample info file:", metadata))
 
 
 if (length(args) == 0 | nchar(args[7])==0) {
-    condition_name <- "normal"
+    condition_name <- "condition"
 } else {
     condition_name <- args[7]
 }
-print(paste("Column Name of condition:", condition_name))
+print(paste("Column Name of condition in metadata file:", condition_name))
 
 
 if (length(args) == 0 | nchar(args[8])==0) {
@@ -68,7 +66,7 @@ print(paste("Minimum number of reads:", filter))
 
 
 if (length(args) == 0 | nchar(args[9])==0) {
-    alpha <- "0.05"
+    alpha <- "0.1"
 } else {
     alpha <- args[9]
 }
