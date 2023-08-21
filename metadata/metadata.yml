@@ -1,8 +1,12 @@
 metadata_version: 1
 name: DeSeq2
-description: |-
-  Differential gene expression analysis with multiple potential input types.
-
-  https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
+description: "Differential gene expression analysis with potential input types: 1.
+  Transcript abundance; 2. Counts data; 3. HTseq-counts data; 4.  Summarized experiment
+  in RDS format. \n\nhttps://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html"
+tags:
+- Genomics
+- RNA
+- Expression
+- Visualization
 authors:
 - name: Sandra Hoffberg
