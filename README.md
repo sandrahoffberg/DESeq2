@@ -59,27 +59,27 @@ If one has already created or obtained a SummarizedExperiment, the single file w
 ## App Panel Parameters
 
 Type of input data
-- Transcipt abundance, Count matrix, htseq count, or summarized experiment.
+- **Transcipt abundance**, **Counts data**, **HTseq data**, or **summarized experiment**.
 
 File path to a single data file
-- For Count matrix or summarized experiment input data types. 
+- For **Counts data** or **summarized experiment** input data types. 
 
 Key word contained in multiple input files
-- for Transcript abundance or htseq count data. 
+- for **Transcript abundance** or **HTseq data**. 
 
 Table that matches transcripts to genes.
-- for Transcipt abundance data. In CSV format, column 1 should be the transcript name and column 2 should be the Gene ID.  If the table is automatically detected, it must contain "gene" in the name. See the example below
+- for **Transcipt abundance** data. In CSV format, column 1 should be the transcript name and column 2 should be the Gene ID.  If the table is automatically detected, it must contain "gene" in the name. See the example below
 
 TXNAME,GENEID <br>
 ENST00000456328.2,ENSG00000223972.5 <br>
 ENST00000450305.2,ENSG00000223972.5 <br> 
 ENST00000473358.1,ENSG00000243485.5 <br>
 
-Type of transcript analysis
-- What anlaysis was performed updstream e.g., kallisto, RSEM, Salmon, Sailfish
+Type of **Transcript abundance** analysis
+- What anlaysis was performed upstream e.g., kallisto, RSEM, Salmon, Sailfish
 
 Path to Sample Metadata 
-- Metadata file, required for Transcript Abundance, HTseq-data, and Counts data. The format of the metadata file is flexible, but it should be a CSV file that lists the condition corresponding to each sample. The design formula reflects the condition, and must be edited as appropriate. If the metadata file is automatically detected, it must contain "Metadata" or "metadata" in the name.
+- Metadata file, required for **Transcript Abundance**, **Counts data**, **HTseq data**. The format of the metadata file is flexible, but it should be a CSV file that lists the condition corresponding to each sample. The design formula reflects the condition, and must be edited as appropriate. If the metadata file is automatically detected, it must contain "Metadata" or "metadata" in the name.
 
 Name of treatment/control column
 - Column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex.  [Default: condition]

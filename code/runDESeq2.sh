@@ -3,15 +3,19 @@
 echo "${1}"
 
 if [ "${1}" == "Transcript_abundance" ]; then
-    Rscript transcript_abundance_files.R "$@"
+    echo "Running /data/transcript_abundance.R"
+    Rscript transcript_abundance.R "$@"
 
-elif [ "${1}" == "Count_matrix" ]; then 
-    Rscript count_matrix.R "$@"
+elif [ "${1}" == "Counts_data" ]; then
+    echo "Running /data/counts_data.R"
+    Rscript counts_data.R "$@"
 
-elif [ "${1}" == "htseq-count" ]; then
-    Rscript htseq-count_files.R "$@"
+elif [ "${1}" == "HTseq_data" ]; then
+    echo "Running /data/htseq_data.R"
+    Rscript htseq_data.R "$@"
 
-elif [ "${1}" == "SummarizedExperiment" ]; then
+elif [ "${1}" == "Summarized_experiment" ]; then
+    echo "Running /data/summarized_experiment.R"
     Rscript summarized_experiment.R "$@"
 
 else 
