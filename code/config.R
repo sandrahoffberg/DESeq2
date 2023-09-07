@@ -4,6 +4,9 @@ system("set -ex")
 ## Passing Args
 args <- commandArgs(trailingOnly=TRUE)
 
+print(paste("Type of input data:", args[1]))
+
+
 if (length(args) == 0 | nchar(args[2])==0) {
     input_dir <- paste("/data/", args[1], sep="") #Set input directory based on type
 } else {
@@ -57,41 +60,50 @@ print(paste("Sample info file:", metadata))
 
 
 if (length(args) == 0 | nchar(args[8])==0) {
+    design <- "condition"
+} else {
+    design <- args[8]
+}
+print(paste("Design formula:", design))
+
+
+
+if (length(args) == 0 | nchar(args[9])==0) {
     condition_name <- "condition"
 } else {
-    condition_name <- args[8]
+    condition_name <- args[9]
 }
 print(paste("Column Name of condition in metadata file:", condition_name))
 
 
-if (length(args) == 0 | nchar(args[9])==0) {
+if (length(args) == 0 | nchar(args[10])==0) {
     filter <- "5"
 } else {
-    filter <- args[9]
+    filter <- args[10]
 }
 print(paste("Minimum number of reads:", filter))
 
 
 
-if (length(args) == 0 | nchar(args[10])==0) {
+if (length(args) == 0 | nchar(args[11])==0) {
     alpha <- "0.1"
 } else {
-    alpha <- args[10]
+    alpha <- args[11]
 }
 print(paste("Alpha signifiicance level:", alpha))
 
 
-if (length(args) == 0 | nchar(args[11])==0) {
+if (length(args) == 0 | nchar(args[12])==0) {
     plots <- 6
 } else {
-    plots <- args[11]
+    plots <- args[12]
 }
 print(paste("Number of genes to plot:", plots))
 
 
-if (length(args) == 0 | nchar(args[12])==0) {
-    outfile <- "DESeq2_results"
+if (length(args) == 0 | nchar(args[13])==0) {
+    outfile <- paste(args[1], "_DESeq2_results", sep="")
 } else {
-    outfile <- args[12]
+    outfile <- args[13]
 }
 print(paste("Name of output file:", outfile))

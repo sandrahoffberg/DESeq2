@@ -12,9 +12,10 @@ sampleTable <- data.frame(sampleName = samples$file,
 
 deseq2Data <- DESeqDataSetFromHTSeqCount(sampleTable = sampleTable,
                                        directory = "../data",
-                                       design= ~ condition)
+                                       design= ~ design)
+# for sample data, the design should be condition
 
 condition <- condition_name
-#condition
+# for sample data, the condition should be condition
 
 source("filter_plot.R", local=TRUE)
