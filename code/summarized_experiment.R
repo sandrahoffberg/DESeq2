@@ -5,10 +5,11 @@ source("config.R", local=TRUE)
 
 deseq_object <- readRDS(counts)
 
-deseq2Data <- DESeqDataSet(deseq_object, design= ~ cell + dex)
-
+deseq2Data <- DESeqDataSet(deseq_object, design= formula(design))
+# for sample data, the design should be "~ cell + dex"
 
 condition <- condition_name
-#dex
+# for sample data, the condition should be "dex"
+
 
 source("filter_plot.R", local=TRUE)

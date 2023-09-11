@@ -15,10 +15,11 @@ txi <- tximport(transcripts, type=analysis, tx2gene=tx2gene, ignoreAfterBar = TR
 # Create the DEseq2DataSet object
 deseq2Data <- DESeqDataSetFromTximport(txi,
                                    colData = samples,
-                                   design = ~ condition)
+                                   design = formula(design))
+# for sample data, the design should be "~ condition"
 
 
 condition <- condition_name
-#condition
+# for sample data, the condition should be "condition"
 
 source("filter_plot.R", local=TRUE)

@@ -6,11 +6,6 @@
 
 Differential expression analysis is used to identify differences in the transcriptome (gene expression) across a cohort of samples. Often, it will be used to define the differences between multiple biological conditions (e.g. drug treated vs. untreated samples). 
 
-**The design formula must be edited as appropriate for the input data**:
-
-The design formula expresses the condition we want to measure the effect of, controlling for batch differences. The formula should be a tilde (~) followed by the variables (columns of the metadata file) with plus signs between them (it will be coerced into an formula if it is not already). The design can be changed later, however then all differential analysis steps should be repeated, as the design formula is used to estimate the dispersions and to estimate the log2 fold changes of the model. DESeq2 can analyze any possible experimental design that can be expressed with fixed effects terms (multiple factors, designs with interactions, designs with continuous variables, splines, and so on are all possible).
-
-
 For more information, see the [DESeq2 Vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
 
@@ -61,6 +56,9 @@ If one has already created or obtained a SummarizedExperiment, the single file w
 Type of input data
 - **Transcipt abundance**, **Counts data**, **HTseq data**, or **summarized experiment**.
 
+Input data directory
+- Directory to search for input data, e.g., /data/HTseq_data
+
 File path to a single data file
 - For **Counts data** or **summarized experiment** input data types. 
 
@@ -76,13 +74,16 @@ ENST00000450305.2,ENSG00000223972.5 <br>
 ENST00000473358.1,ENSG00000243485.5 <br>
 
 Type of **Transcript abundance** analysis
-- What anlaysis was performed upstream e.g., kallisto, RSEM, Salmon, Sailfish
+- What anlaysis was performed upstream e.g., kallisto, RSEM, Salmon, Sailfish [Deafult: kallisto]
 
 Path to Sample Metadata 
 - Metadata file, required for **Transcript Abundance**, **Counts data**, **HTseq data**. The format of the metadata file is flexible, but it should be a CSV file that lists the condition corresponding to each sample. The design formula reflects the condition, and must be edited as appropriate. If the metadata file is automatically detected, it must contain "Metadata" or "metadata" in the name.
 
+Design formula
+- A design formula tells the software which sources of variation to test for. This includes both your factor of interest as well as any additional covariates that are sources of variation. The formula should be a tilde (~) followed by the variables (columns of the metadata file) with plus signs between them. The design formula should have all of the factors in your metadata that account for major sources of variation in your data. DESeq2 can analyze any possible experimental design that can be expressed with fixed effects terms (multiple factors, designs with interactions, designs with continuous variables, splines, and so on are all possible). [Default: ~ condition]
+
 Name of treatment/control column
-- Column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex.  [Default: condition]
+- Column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex. [Default: condition]
 
 Minimum number of reads
 - Minimum reads across all samples to include that sample in the data matrix [Default: 5]
@@ -94,7 +95,7 @@ Number of genes to save individual plots for
 - The # most significant genes to save plots for in the **/plots_by_gene** directory. [Default: 6]
 
 Name of output file
-- Name of CSV file without file extension. [Default: DESeq2_results]
+- Name of CSV file without file extension. [Default: {type of input data}_DESeq2_results]
 
 
 ## Cite 
