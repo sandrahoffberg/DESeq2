@@ -8,7 +8,7 @@ print(paste("Type of input data:", args[1]))
 
 
 if (length(args) == 0 | nchar(args[2])==0) {
-    input_dir <- paste("/data/", args[1], sep="") #Set input directory based on type
+    input_dir <- paste("../data/", args[1], sep="") #Set input directory based on type
 } else {
     input_dir <- args[2]
 }

@@ -54,36 +54,56 @@ If one has already created or obtained a SummarizedExperiment, the single file w
 ## App Panel Parameters
 
 Type of input data
-- **Transcipt abundance**, **Counts data**, **HTseq data**, or **summarized experiment**.
+- **Transcipt abundance**, **Counts data**, **HTseq data**, or **summarized experiment**. [default: Transcript_abundance]
 
 Input data directory
-- Directory to search for input data, e.g., /data/HTseq_data
+- Directory to search for input data, e.g., /data/HTseq_data. If not provided, this will default to "../data/\$input_data_type". For example, ../data/Transcript_abundance when Type of input data is "Transcript_abundance" [default: None]
 
 File path to a single data file
-- For **Counts data** or **summarized experiment** input data types. 
+- For **Counts data** or **summarized experiment** input data types. If not specified, first file containing "raw" will be chosen. [default: None]
 
 Key word contained in multiple input files
-- for **Transcript abundance** or **HTseq data**. 
+- for **Transcript abundance** or **HTseq data**. For the sample data included, this should be "abundance" for Transcript abundance and "treated" for HTseq_data (includes treated and untreated). If not specified, selects all files containing "abundance.tsv" [default: None]
 
 Table that matches transcripts to genes.
-- for **Transcipt abundance** data. In CSV format, column 1 should be the transcript name and column 2 should be the Gene ID.  If the table is automatically detected, it must contain "gene" in the name. See the example below
+- for **Transcipt abundance** data. In CSV format, column 1 should be the transcript name and column 2 should be the Gene ID.  See the example below 
 
 TXNAME,GENEID <br>
 ENST00000456328.2,ENSG00000223972.5 <br>
 ENST00000450305.2,ENSG00000223972.5 <br> 
 ENST00000473358.1,ENSG00000243485.5 <br>
 
+- If the file is not specified, The first file containing "gen" is used. [default: None]
+
 Type of **Transcript abundance** analysis
-- What anlaysis was performed upstream e.g., kallisto, RSEM, Salmon, Sailfish [Deafult: kallisto]
+- What anlaysis was performed upstream e.g., kallisto, RSEM, Salmon, Sailfish. This only applies for Transcript abundance inputs. [Deafult: kallisto]
 
 Path to Sample Metadata 
-- Metadata file, required for **Transcript Abundance**, **Counts data**, **HTseq data**. The format of the metadata file is flexible, but it should be a CSV file that lists the condition corresponding to each sample. The design formula reflects the condition, and must be edited as appropriate. If the metadata file is automatically detected, it must contain "Metadata" or "metadata" in the name.
+- Metadata file, required for **Transcript Abundance**, **Counts data**, **HTseq data**. The format of the metadata file is flexible, but it should be a CSV file that lists the condition corresponding to each sample. The design formula should use a column from this file to separate the control and test conditions. If the metadata file is not specified, the first file containing "Metadata" or "metadata" is used. [default: None]
 
 Design formula
 - A design formula tells the software which sources of variation to test for. This includes both your factor of interest as well as any additional covariates that are sources of variation. The formula should be a tilde (~) followed by the variables (columns of the metadata file) with plus signs between them. The design formula should have all of the factors in your metadata that account for major sources of variation in your data. DESeq2 can analyze any possible experimental design that can be expressed with fixed effects terms (multiple factors, designs with interactions, designs with continuous variables, splines, and so on are all possible). [Default: ~ condition]
 
+- For the sample data included
+
+    | Type of input data | Design | 
+    | :---  | :--- | 
+    | Counts_data | ~ individualID + tissueType | 
+    | HTseq_data | ~ condition | 
+    | Summarized_experiment | ~ cell + dex | 
+    | Transcript_abundance | ~ condition |
+
 Name of treatment/control column
 - Column in the metadata file that indicates which treatment the sample was in, e.g., condition, tissueType, dex. [Default: condition]
+
+- For the sample data included
+
+    | Type of input data | Control Column | 
+    | :---  | :--- | 
+    | Counts_data | tissueType | 
+    | HTseq_data | condition | 
+    | Summarized_experiment | dex | 
+    | Transcript_abundance | condition |
 
 Minimum number of reads
 - Minimum reads across all samples to include that sample in the data matrix [Default: 5]
