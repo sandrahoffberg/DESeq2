@@ -8,6 +8,7 @@ Differential expression analysis is used to identify differences in the transcri
 
 For more information, see the [DESeq2 Vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html).
 
+For example parameters that work with the sample data included in this capsule, please reference [deseq_sample_arguments](deseq_sample_arguments.csv).
 
 ## Input data
 
@@ -66,7 +67,7 @@ Key word contained in multiple input files
 - for **Transcript abundance** or **HTseq data**. For the sample data included, this should be "abundance" for Transcript abundance and "treated" for HTseq_data (includes treated and untreated). If not specified, selects all files containing "abundance.tsv" [default: None]
 
 Table that matches transcripts to genes.
-- for **Transcipt abundance** data. In CSV format, column 1 should be the transcript name and column 2 should be the Gene ID.  See the example below 
+- for **Transcript abundance** data. In CSV format, column 1 should be the transcript name and column 2 should be the Gene ID.  See the example below 
 
 TXNAME,GENEID <br>
 ENST00000456328.2,ENSG00000223972.5 <br>

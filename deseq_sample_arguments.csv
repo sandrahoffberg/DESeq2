@@ -1,0 +1,13 @@
+Type of Input data,Counts_data,HTseq_data,Transcript_abundance,Summarized_experiment
+Input Data Directory,,,,
+File path to single data file,,,,../data/Summarized_experiment/summarized_experiment.RDS
+Key word contained in multiple data files,,treated,abundance,
+Table with transcripts and genes,,,,
+Type of transcript analysis,kallisto,kallisto,kallisto,kallisto
+Path to Sample Metadata,,../data/HTseq_data/pasilla_sample_annotation.csv,../data/Transcript_abundance/sample_metadata.csv,
+Design formula,~ individualID + tissueType,~ condition,~ condition,~ cell + dex
+Name of treatment/control column in metadata file,tissueType,condition,condition,dex
+Minimum number of reads,5,5,5,5
+alpha value for significance in MA plot,0.1,0.1,0.1,0.1
+Number of genes to save plots for,6,6,6,6
+Name of output file,,,,
