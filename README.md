@@ -57,10 +57,10 @@ Type of input data
 - **Transcipt abundance**, **Counts data**, **HTseq data**, or **summarized experiment**. [default: Transcript_abundance]
 
 Input data directory
-- Directory to search for input data, e.g., /data/HTseq_data. If not provided, this will default to "../data/\$input_data_type". For example, ../data/Transcript_abundance when Type of input data is "Transcript_abundance" [default: None]
+- Directory to search for input data, e.g., /data/HTseq_data. If not provided, this will default to "../data/\$input_data_type". For example, ../data/Transcript_abundance when **Type of input data** is "Transcript_abundance" [default: None]
 
 File path to a single data file
-- For **Counts data** or **summarized experiment** input data types. If not specified, first file containing "raw" will be chosen. [default: None]
+- For **Counts_data** or **Summarized_experiment** input data types. If not specified, first file containing "raw" will be chosen. [default: None]
 
 Key word contained in multiple input files
 - for **Transcript abundance** or **HTseq data**. For the sample data included, this should be "abundance" for Transcript abundance and "treated" for HTseq_data (includes treated and untreated). If not specified, selects all files containing "abundance.tsv" [default: None]
