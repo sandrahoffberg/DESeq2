@@ -116,7 +116,7 @@ Number of genes to save individual plots for
 - The # most significant genes to save plots for in the **/plots_by_gene** directory. [Default: 6]
 
 Name of output file
-- Name of CSV file without file extension. [Default: {type of input data}_DESeq2_results]
+- Name of CSV file without file extension. [Default: Transcript_abundance_DESeq2_results]
 
 
 ## Cite 
