@@ -13,7 +13,7 @@ sampleData <- read.csv(metadata)
 
 # Convert count data to a matrix of appropriate form that DEseq2 can read
 geneID <- rawCounts$Gene.ID
-sampleIndex <- grepl("SRR\\d+", colnames(rawCounts))
+sampleIndex <- setdiff(colnames(rawCounts), c("Gene.ID", "Gene.Name"))
 rawCounts <- as.matrix(rawCounts[,sampleIndex])
 rownames(rawCounts) <- geneID
 head(rawCounts)
@@ -21,10 +21,9 @@ head(rawCounts)
 # Convert sample variable mappings to an appropriate form that DESeq2 can read
 head(sampleData)
 rownames(sampleData) <- sampleData$Run
-keep <- c("Sample.Characteristic.biopsy.site.", "Sample.Characteristic.individual.")
+keep <- setdiff(strsplit(design, " ")[[1]], c('~', '+'))
 sampleData <- sampleData[,keep]
-colnames(sampleData) <- c("tissueType", "individualID")
-sampleData$individualID <- factor(sampleData$individualID)
+sampleData <- apply(sampleData, 2, factor)
 head(sampleData)
 
 # Put the columns of the count data in the same order as rows names of the sample mapping, then make sure it worked
@@ -33,10 +32,10 @@ all(colnames(rawCounts) == rownames(sampleData))
 
 # Create the DEseq2DataSet object
 deseq2Data <- DESeqDataSetFromMatrix(countData=rawCounts, colData=sampleData, design= formula(design))
-# for sample data, the design should be "~ individualID + tissueType"
+# for sample data, the design should be "~ Sample.Characteristic.individual. + Sample.Characteristic.biopsy.site."
 
 condition = condition_name
-# for sample data, the condition should be "tissueType"
+# for sample data, the condition should be "Sample.Characteristic.biopsy.site."
 
 source("filter_plot.R", local=TRUE)
 
