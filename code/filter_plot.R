@@ -41,9 +41,9 @@ dev.off()
 dir.create("../results/plots_by_gene/", recursive=TRUE)
 
 for (i in 1:plots) {
-  a <- plotCounts(deseq2Data, gene=res@rownames[i], intgroup=condition, returnData=TRUE)
+  a <- plotCounts(deseq2Data, gene=res@rownames[i], intgroup=condition_name, returnData=TRUE)
 
-  b <- ggplot(a, aes(x=sampleData[, condition], y=count, color=sampleData[, condition])) + 
+  b <- ggplot(a, aes(x=condition, y=count, color=condition)) + 
       geom_point(position=position_jitter(w=0.1,h=0)) + 
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 
@@ -71,6 +71,6 @@ dev.off()
 #vst function will perform variance stabilizing transformation
 
 vsdata <- vst(deseq2Data, blind=FALSE)
-PCA <- plotPCA(vsdata, intgroup=condition) + scale_color_manual(values=c("red","forestgreen","blue"))
+PCA <- plotPCA(vsdata, intgroup=condition_name) + scale_color_manual(values=c("red","forestgreen","blue"))
 ggsave(file="../results/PCA.png", plot=PCA, width=10, height=10)
 

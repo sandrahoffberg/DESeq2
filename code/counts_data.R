@@ -34,7 +34,7 @@ all(colnames(rawCounts) == rownames(sampleData))
 deseq2Data <- DESeqDataSetFromMatrix(countData=rawCounts, colData=sampleData, design= formula(design))
 # for sample data, the design should be "~ Sample.Characteristic.individual. + Sample.Characteristic.biopsy.site."
 
-condition = condition_name
+condition = sampleData[, condition_name]
 # for sample data, the condition should be "Sample.Characteristic.biopsy.site."
 
 source("filter_plot.R", local=TRUE)
