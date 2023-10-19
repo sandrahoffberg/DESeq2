@@ -43,7 +43,7 @@ dir.create("../results/plots_by_gene/", recursive=TRUE)
 for (i in 1:plots) {
   a <- plotCounts(deseq2Data, gene=res@rownames[i], intgroup=condition, returnData=TRUE)
 
-  b <- ggplot(a, aes(x=condition, y=count)) + 
+  b <- ggplot(a, aes(x=sampleData[, condition], y=count, color=sampleData[, condition])) + 
       geom_point(position=position_jitter(w=0.1,h=0)) + 
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 
