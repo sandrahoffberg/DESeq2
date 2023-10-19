@@ -29,8 +29,6 @@ The user should provide (1) the counts matrix , (2) information about the sample
 
 The counts matrix must include the columns "Gene Name" and "Gene ID" in order to identify genes and all other columns must be sample/run names. The metadata must include a "Run" column which contains the sample/run names that match the counts matrix. All other columns in the metadata can be named however you wish, though do note that if you want to specify columns in the design formula or treatment column any spaces, brackets, etc. will be replaced with "." characters. So for example, "Sample Characteristic Ontology Term[disease]" would be "Sample.Characteristic.Ontology.Term.disease."
 
-If the counts matrix is to be autodetected, it must contain "raw" in the name. 
-
 3. htseq-count data: <br>
 from HTSeq Python package
 
