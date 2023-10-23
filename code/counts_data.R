@@ -22,7 +22,12 @@ head(rawCounts)
 head(sampleData)
 rownames(sampleData) <- sampleData$Run
 keep <- setdiff(strsplit(design, " ")[[1]], c('~', '+'))
-sampleData <- sampleData[,keep]
+number_columns = length(keep) 
+if (number_columns == 1) {
+  sampleData <- sampleData[keep]
+} else {
+  sampleData <- sampleData[,keep]
+}
 sampleData <- apply(sampleData, 2, factor)
 head(sampleData)
 
