@@ -91,7 +91,7 @@ Design formula
 
     | Type of input data | Design | 
     | :---  | :--- | 
-    | Counts_data | ~ individualID + tissueType | 
+    | Counts_data | ~ Sample.Characteristic.individual. + Sample.Characteristic.biopsy.site. | 
     | HTseq_data | ~ condition | 
     | Summarized_experiment | ~ cell + dex | 
     | Transcript_abundance | ~ condition |
@@ -103,7 +103,7 @@ Name of treatment/control column
 
     | Type of input data | Control Column | 
     | :---  | :--- | 
-    | Counts_data | tissueType | 
+    | Counts_data | Sample.Characteristic.biopsy.site. | 
     | HTseq_data | condition | 
     | Summarized_experiment | dex | 
     | Transcript_abundance | condition |
